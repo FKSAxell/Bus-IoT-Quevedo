@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Layout } from 'antd';
 import logo from './img/logo_uteq.png';
 import GoogleMapReact from 'google-map-react';
+import { db } from "../src/services/firebase";
 import './App.css';
 const { Sider } = Layout;
 const props = {
@@ -12,7 +13,18 @@ const props = {
   },
   zoom: 11
 };
+
 class App extends Component {
+  componentDidMount(){
+    console.log("hola")
+    db.ref('FirebaseIOT').on('value', (snapshot) => {
+      const data = snapshot.val();
+      console.log(data)
+      console.log("hola2")
+    });
+
+  }
+  
   render() {
     return (
       <Layout>
