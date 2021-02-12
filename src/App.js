@@ -22,9 +22,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log("hola")
     this.dbVal()
-
   }
 
   dbVal() {
@@ -97,7 +95,12 @@ class App extends Component {
             >
               <Marker
                 onClick={this.onMarkerClick}
-                name={<div><p>{'Latitud: ' + this.state.latCen}</p><p>{"Longitud: " + this.state.lngCen}</p></div>}
+                name={
+                  <div>
+                    <p>{'Latitud: ' + this.state.latCen}</p>
+                    <p>{"Longitud: " + this.state.lngCen}</p>
+                  </div>
+                }
                 position={
                   {
                     lat: this.state.latCen,
