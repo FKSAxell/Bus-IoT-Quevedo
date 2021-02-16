@@ -26,13 +26,18 @@ class App extends Component {
   }
 
   dbVal() {
-    db.ref('testAxell').on('value', (snapshot) => {
+    db.ref('FirebaseIOT').on('value', (snapshot) => {
       const data = snapshot.val();
       console.log(data)
       console.log(data.lat)
       this.setState({
         latCen: data.lat,
         lngCen: data.lng,
+        conteoentra:data.conteoentra,
+        conteosale:data.conteosale,
+        conteototal:data.conteototal,
+        humedad:data.humedad,
+        temperatura:data.temperatura,
         showingInfoWindow: false,
         activeMarker: null
       })
@@ -99,6 +104,11 @@ class App extends Component {
                   <div>
                     <p>{'Latitud: ' + this.state.latCen}</p>
                     <p>{"Longitud: " + this.state.lngCen}</p>
+                    <p>{'Personas que subieron: ' + this.state.conteoentra}</p>
+                    <p>{"Personas que bajaron: " + this.state.conteosale}</p>
+                    <p>{"Personas dentro del bus: " + this.state.conteototal}</p>
+                    <p>{'Humedad: ' + this.state.humedad}</p>
+                    <p>{"Temperatura: " + this.state.temperatura}</p>
                   </div>
                 }
                 position={
