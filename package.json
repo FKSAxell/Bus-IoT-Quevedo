@@ -1,5 +1,6 @@
 {
   "name": "bus_iot_quevedo",
+"homepage": ".",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
