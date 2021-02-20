@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Layout } from 'antd';
+import { Layout, Divider } from 'antd';
 import logo from './img/logo_uteq.png';
 import { Map, GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
 import { db } from "../src/services/firebase";
@@ -19,8 +19,8 @@ class App extends Component {
       selectedPlace: {},          // Shows the InfoWindow to the selected place upon a marker
       latCen: 0,
       lngCen: 0,
-      lat_p:0,
-      lng_p:0
+      lat_p: 0,
+      lng_p: 0
     };
   }
 
@@ -34,14 +34,14 @@ class App extends Component {
       console.log(data)
       console.log(data.lat)
 
-      let distancia= HaversineGeolocation.getDistanceBetween(
+      let distancia = HaversineGeolocation.getDistanceBetween(
         {
-            latitude: data.lat,
-            longitude: data.lng
+          latitude: data.lat,
+          longitude: data.lng
         },
         {
-            latitude: data.lat_p,
-            longitude: data.lng_p
+          latitude: data.lat_p,
+          longitude: data.lng_p
         }
 
       )
@@ -57,8 +57,8 @@ class App extends Component {
         conteototal: data.conteototal,
         humedad: data.humedad,
         temperatura: data.temperatura,
-        distancia:distancia,
-        tiempo:Math.round((this.state.distancia/70)*60),
+        velocidad:data.velocidad,
+        distancia: distancia,
         showingInfoWindow: false,
         activeMarker: null
       })
@@ -89,23 +89,37 @@ class App extends Component {
 
 
   render() {
-
-
-
     return (
       <Layout>
 
         <Sider className="menu" breakpoint="lg" collapsedWidth="0" width="300">
-
+          <div className="contenedor">
           <div className="logo" >
             <img src={logo} alt="Logo" width="40%" height="auto" />
           </div>
-          <h1 className="titulos">PROYECTO INTEGRADOR</h1>
+          <h1 className="titulos">SISTEMA IOT PARA SERVICIO DE AUTOBÚS PÚBLICO URBANO EN LA CIUDAD DE QUEVEDO</h1>
+          <Divider className="divisor" >Acerca de</Divider>
+          <p className="texto">
+            Visualización en tiempo real de información sobre buses urbanos de la ciudad de Quevedo. Presionando en el icono del bus se podrán observar datos como:
+          </p>
+          <p className="texto">
+            -Temperatura
+          </p>
+          <p className="texto">
+            -Humedad
+          </p>
+          <p className="texto">
+            -Total de personas
+          </p>
+          <p className="texto">
+            -Tiempo estimado de llegada
+          </p>
+          </div>
+
+
 
         </Sider>
-
         <Layout>
-
           <div style={{ height: '100vh', width: '100%' }}>
             <Map
               google={this.props.google}
@@ -120,8 +134,6 @@ class App extends Component {
               mapTypeControl={false}
               fullscreenControl={false}
               streetViewControl={false}
-
-
             >
               <Marker
                 onClick={this.onMarkerClick}
@@ -134,8 +146,8 @@ class App extends Component {
                     <p>{"Personas dentro del bus: " + this.state.conteototal}</p>
                     <p>{'Humedad: ' + this.state.humedad}</p>
                     <p>{"Temperatura: " + this.state.temperatura}</p>
-                    <p>{"Distancia: " + this.state.distancia+ " Km"}</p>
-                    <p>{"Tiempo Estimado de llegada: " + this.state.tiempo + " minutos"}</p>
+                    <p>{"Distancia: " + this.state.distancia + " Km"}</p>
+                    <p>{"Tiempo Estimado de llegada: " + Math.round((this.state.distancia / this.state.velocidad) * 60) + " minutos"}</p>
                   </div>
                 }
                 position={
@@ -156,7 +168,7 @@ class App extends Component {
                 visible={this.state.showingInfoWindow}
                 onClose={this.onClose}
               >
-               
+
                 <div>
                   <h4>{this.state.selectedPlace.name}</h4>
                 </div>
