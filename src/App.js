@@ -4,6 +4,7 @@ import { Layout } from 'antd';
 import logo from './img/logo_uteq.png';
 import { Map, GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
 import { db } from "../src/services/firebase";
+import HaversineGeolocation from 'haversine-geolocation';
 import './App.css';
 const { Sider } = Layout;
 
@@ -17,7 +18,9 @@ class App extends Component {
       activeMarker: {},          // Shows the active marker upon click
       selectedPlace: {},          // Shows the InfoWindow to the selected place upon a marker
       latCen: 0,
-      lngCen: 0
+      lngCen: 0,
+      lat_p:0,
+      lng_p:0
     };
   }
 
@@ -30,17 +33,37 @@ class App extends Component {
       const data = snapshot.val();
       console.log(data)
       console.log(data.lat)
+
+      let distancia= HaversineGeolocation.getDistanceBetween(
+        {
+            latitude: data.lat,
+            longitude: data.lng
+        },
+        {
+            latitude: data.lat_p,
+            longitude: data.lng_p
+        }
+
+      )
+      console.log(distancia)
+
       this.setState({
         latCen: data.lat,
         lngCen: data.lng,
-        conteoentra:data.conteoentra,
-        conteosale:data.conteosale,
-        conteototal:data.conteototal,
-        humedad:data.humedad,
-        temperatura:data.temperatura,
+        lat_p: data.lat_p,
+        lng_p: data.lng_p,
+        conteoentra: data.conteoentra,
+        conteosale: data.conteosale,
+        conteototal: data.conteototal,
+        humedad: data.humedad,
+        temperatura: data.temperatura,
+        distancia:distancia,
+        tiempo:Math.round((this.state.distancia/70)*60),
         showingInfoWindow: false,
         activeMarker: null
       })
+
+
     });
 
   }
@@ -97,6 +120,8 @@ class App extends Component {
               mapTypeControl={false}
               fullscreenControl={false}
               streetViewControl={false}
+
+
             >
               <Marker
                 onClick={this.onMarkerClick}
@@ -109,6 +134,8 @@ class App extends Component {
                     <p>{"Personas dentro del bus: " + this.state.conteototal}</p>
                     <p>{'Humedad: ' + this.state.humedad}</p>
                     <p>{"Temperatura: " + this.state.temperatura}</p>
+                    <p>{"Distancia: " + this.state.distancia+ " Km"}</p>
+                    <p>{"Tiempo Estimado de llegada: " + this.state.tiempo + " minutos"}</p>
                   </div>
                 }
                 position={
@@ -129,10 +156,12 @@ class App extends Component {
                 visible={this.state.showingInfoWindow}
                 onClose={this.onClose}
               >
+               
                 <div>
                   <h4>{this.state.selectedPlace.name}</h4>
                 </div>
               </InfoWindow>
+
             </Map>
           </div>
 
@@ -145,8 +174,6 @@ class App extends Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: 'AIzaSyBjtK_qMODLxmV-64vddXB0zX5b0o7MLHg',
+  apiKey: 'AIzaSyAT8VZmA6Z8JNBAKPl1uKexoRK4ZrtfdHo',
 })(App);
 //-2.1552202,-79.8948806
-//AIzaSyBjtK_qMODLxmV-64vddXB0zX5b0o7MLHg
-//AIzaSyBRcgW6vPEOiSoqq18ZBgL_AXSfxArqIHU
